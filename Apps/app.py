@@ -33,6 +33,10 @@ def index():
 def loginpage():
     return render_template('login.html')
 
+@app.route('/registration')
+def registpage():
+    return render_template('registration.html')
+
 @app.route('/submit', methods=['POST'])
 def submit():
     if request.method == 'POST':
