@@ -1,37 +1,27 @@
 from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
-ENV = 'dev'
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'sistem_rekomendasi'
 
-if ENV == 'dev':
-    app.debug = True
-    app.config['SQLACHEMY_DATABASE_URI'] = 'postgresql://yudhistiradwiki:TRPL2k19@localhost/sis'
-else:
-    app.debug = False
-    app.config['SQLACHEMY_DATABASE_URI'] = ''
-
-app.config['SQLACHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-
-class Login(db.Model):
-    __tablename__ = 'login'
-    id = db.Column(db.Integer, primary_key = True)
-    pswd = db.Column(db.String(200))
-
-    def __init__(self, id, pswd):
-        self.id = id
-        self.pswd = pswd
-
+mysql = MySQL(app)
+ 
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/login')
 def loginpage():
-    return render_template('login.html')
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM user")
+    fetchdata = cur.fetchall()
+    cur.close()
+
+    return render_template('login.html', data = fetchdata)
 
 @app.route('/registration')
 def registpage():
