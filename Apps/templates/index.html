@@ -1,16 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <title>Halaman home</title>
     </head>
     <body>
-        {% if message %}
-            <p> {{message | safe}} </p>
-        {% endif %}
-        <form action="/submit" method="post">
-            <input type="text" name="id" placeholder="nama">
-            <input type="password" name="pass" placeholder="pass">
-            <button type="submit">Submit</button>
-        </form>
+        <h1>Halaman Home</h1><br>
+        <a href="/login">Halaman login</a>
     </body>
 </html>
