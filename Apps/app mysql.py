@@ -1,31 +1,27 @@
 from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://yudhistiradwiki:TRPL2k19@localhost/tictrav'
-db = SQLAlchemy(app)
 
-class Admin(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(120))
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'sistem_rekomendasi'
 
-    def __init__(self, email, password):
-        self.email = email
-        self.password = password
-    
-    def __repr__(self):
-        return '<Admin %r>' % self.email
-
+mysql = MySQL(app)
+ 
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/login')
 def loginpage():
-    
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM user")
+    fetchdata = cur.fetchall()
+    cur.close()
 
-    return render_template('login.html')
+    return render_template('login.html', data = fetchdata)
 
 @app.route('/registration')
 def registpage():
