@@ -15,6 +15,9 @@
             <button type="submit">Submit</button>
         </form>
 
+        {% for user in datauser %}
+        <li>{{user.email}} - {{user.password}}</li>
+        {% endfor %}
         <br>
     </body>
 </html>

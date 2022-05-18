@@ -17,15 +17,26 @@ class Admin(db.Model):
     def __repr__(self):
         return '<Admin %r>' % self.email
 
+class User(db.Model):
+    User_Id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(120))
+
+    def __init__(self, email, password):
+        self.email = email
+        self.password = password
+    
+    def __repr__(self):
+        return '<User %r>' % self.email
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
 @app.route('/login')
 def loginpage():
-    
-
-    return render_template('login.html')
+    myUser = User.query.all()
+    return render_template('login.html', datauser = myUser)
 
 @app.route('/registration')
 def registpage():
