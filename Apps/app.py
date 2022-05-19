@@ -33,6 +33,10 @@ class User(db.Model):
 def index():
     return render_template('index.html')
 
+@app.route('/ticket')
+def ticket():
+    return render_template('ticket.html')
+
 @app.route('/login')
 def loginpage():
     myUser = User.query.all()
