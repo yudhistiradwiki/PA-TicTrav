@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 from flask_sqlalchemy import SQLAlchemy
+import pdfkit,os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://yudhistiradwiki:TRPL2k19@localhost/tictrav'
@@ -33,9 +34,23 @@ class User(db.Model):
 def index():
     return render_template('index.html')
 
+
 @app.route('/ticket')
 def ticket():
     return render_template('ticket.html')
+
+
+@app.route('/ticket/<user>/<location>')
+def ticket(user, location):
+    css = 'static/ticket/style.css'
+    rendered = render_template('ticket.html', user=user, location=location)
+    pdf = pdfkit.from_string(rendered, css=css)
+
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=output.pdf'
+
+    return response
 
 @app.route('/login')
 def loginpage():
@@ -57,4 +72,4 @@ def submit():
         return render_template('2.html')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
