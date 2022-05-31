@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, make_response
 from flask_sqlalchemy import SQLAlchemy
-import pdfkit,os
+import pdfkit
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://yudhistiradwiki:TRPL2k19@localhost/tictrav'
@@ -14,7 +14,7 @@ class Admin(db.Model):
     def __init__(self, email, password):
         self.email = email
         self.password = password
-    
+
     def __repr__(self):
         return '<Admin %r>' % self.email
 
@@ -41,15 +41,13 @@ def ticket():
 
 
 @app.route('/ticket/<user>/<location>')
-def ticket(user, location):
+def tickett(user, location):
     css = 'static/ticket/style.css'
     rendered = render_template('ticket.html', user=user, location=location)
     pdf = pdfkit.from_string(rendered, css=css)
-
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = 'inline; filename=output.pdf'
-
     return response
 
 @app.route('/login')
