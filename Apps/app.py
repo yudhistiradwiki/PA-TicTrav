@@ -41,7 +41,7 @@ def ticket():
 
 
 @app.route('/ticket/<user>/<location>')
-def ticket(user, location):
+def tickett(user, location):
     css = 'static/ticket/style.css'
     rendered = render_template('ticket.html', user=user, location=location)
     pdf = pdfkit.from_string(rendered, css=css)
